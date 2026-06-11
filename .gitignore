@@ -12,6 +12,8 @@ dist
 dist-ssr
 output
 *.local
+.env
+.env.local
 package-lock.json
 
 # Editor directories and files
