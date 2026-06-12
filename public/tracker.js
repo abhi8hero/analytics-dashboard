@@ -239,29 +239,22 @@
       site_domain: getSiteDomain(),
     };
 
-    // Use sendBeacon when available for reliability on page unload
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon(
-        TRACK_ENDPOINT,
-        new Blob([JSON.stringify(payload)], { type: 'application/json' })
-      );
-    } else {
+    // Use fetch
       fetch(TRACK_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload),
-        keepalive: true,
-      })
-      .then(async (res) => {
-        const data = await res.json();
-        console.log('TRACK RESPONSE:', data);
-      })
-      .catch((err) => {
-        console.error('TRACK ERROR:', err);
-      });
-    }
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload),
+      keepalive: true,
+    })
+    .then(async (res) => {
+      const data = await res.json();
+      console.log('TRACK RESPONSE:', data);
+    })
+    .catch((err) => {
+      console.error('TRACK ERROR:', err);
+    });
   }
 
   // ── SPA support — intercept pushState / replaceState ─────────────────────
