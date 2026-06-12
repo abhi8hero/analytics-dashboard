@@ -48,9 +48,13 @@
   'use strict';
 
   // ── Configuration ─────────────────────────────────────────────────────────
+   const scriptTag = document.querySelector(
+    'script[data-endpoint]'
+  );
+
   const TRACK_ENDPOINT =
-    document.currentScript?.getAttribute('data-endpoint') ||
-    'https://fkkircsgncmovjimzkie.supabase.co/functions/v1/track';
+    scriptTag?.dataset.endpoint ||
+    'https://xaghkxxhmhrpqsnovqrh.supabase.co/functions/v1/track';
 
   const SESSION_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
   const STORAGE_KEY_FP = '_atrk_fp';
