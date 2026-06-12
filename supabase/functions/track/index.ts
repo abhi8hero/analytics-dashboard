@@ -16,7 +16,7 @@ async function geoLookup(ip: string) {
 
   try {
     const res = await fetch(
-      `http://ip-api.com/json/${ip}?fields=status,country,countryCode,regionName,city,lat,lon`,
+      `https://ip-api.com/json/${ip}?fields=status,country,countryCode,regionName,city,lat,lon`,
       { signal: AbortSignal.timeout(3000) }
     );
     if (!res.ok) return null;
