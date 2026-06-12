@@ -248,11 +248,18 @@
     } else {
       fetch(TRACK_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify(payload),
         keepalive: true,
-      }).catch(function () {
-        // Fail silently — never interrupt the user experience
+      })
+      .then(async (res) => {
+        const data = await res.json();
+        console.log('TRACK RESPONSE:', data);
+      })
+      .catch((err) => {
+        console.error('TRACK ERROR:', err);
       });
     }
   }
