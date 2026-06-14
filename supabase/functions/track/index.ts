@@ -16,27 +16,31 @@ async function geoLookup(ip: string) {
 
   try {
     const res = await fetch(
-      `https://ip-api.com/json/${ip}?fields=status,country,countryCode,regionName,city,lat,lon`,
+      `https://ipwho.is/${ip}`,
       { signal: AbortSignal.timeout(3000) }
     );
+
     if (!res.ok) return null;
+
     const data: {
-    status: string;
-    country?: string;
-    countryCode?: string;
-    regionName?: string;
-    city?: string;
-    lat?: number;
-    lon?: number;
-  } = await res.json();
-    if (data.status !== 'success') return null;
+      success: boolean;
+      country?: string;
+      country_code?: string;
+      region?: string;
+      city?: string;
+      latitude?: number;
+      longitude?: number;
+    } = await res.json();
+
+    if (!data.success) return null;
+
     return {
       country: data.country ?? null,
-      country_code: data.countryCode ?? null,
-      region: data.regionName ?? null,
+      country_code: data.country_code ?? null,
+      region: data.region ?? null,
       city: data.city ?? null,
-      lat: data.lat ?? null,
-      lon: data.lon ?? null,
+      lat: data.latitude ?? null,
+      lon: data.longitude ?? null,
     };
   } catch {
     return null;
