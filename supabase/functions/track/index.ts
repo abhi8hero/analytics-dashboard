@@ -5,12 +5,12 @@ import { corsHeaders } from '../_shared/cors.ts';
 async function geoLookup(ip: string) {
   // Skip private / loopback addresses
   if (
-    ip === '127.0.0.1' ||
-    ip === '::1' ||
-    ip.startsWith('192.168.') ||
-    ip.startsWith('10.') ||
-    ip.startsWith('172.')
-  ) {
+  ip === '127.0.0.1' ||
+  ip === '::1' ||
+  ip.startsWith('192.168.') ||
+  ip.startsWith('10.') ||
+  /^172\.(1[6-9]|2\d|3[0-1])\./.test(ip)
+) {
     return { country: 'Local', country_code: 'LO', region: null, city: null, lat: null, lon: null };
   }
 
@@ -20,7 +20,15 @@ async function geoLookup(ip: string) {
       { signal: AbortSignal.timeout(3000) }
     );
     if (!res.ok) return null;
-    const data = await res.json();
+    const data: {
+    status: string;
+    country?: string;
+    countryCode?: string;
+    regionName?: string;
+    city?: string;
+    lat?: number;
+    lon?: number;
+  } = await res.json();
     if (data.status !== 'success') return null;
     return {
       country: data.country ?? null,
@@ -87,10 +95,17 @@ Deno.serve(async (req: Request) => {
     }
 
     // Extract real IP from request headers
+    const forwardedFor = req.headers.get('x-forwarded-for');
+    const realIp = req.headers.get('x-real-ip');
+    const cfIp = req.headers.get('cf-connecting-ip');
+
     const ip =
-      req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-      req.headers.get('x-real-ip') ||
+      cfIp ||
+      (forwardedFor ? forwardedFor.split(',')[0].trim() : null) ||
+      realIp ||
       '127.0.0.1';
+
+    console.log('Detected IP:', ip);
 
     const userAgent = req.headers.get('user-agent') || '';
 
@@ -105,14 +120,58 @@ Deno.serve(async (req: Request) => {
 
     if (existingVisitor) {
       visitorId = existingVisitor.id;
+
       await supabase
         .from('visitors')
         .update({
           last_seen: new Date().toISOString(),
           visit_count: existingVisitor.visit_count + 1,
           is_returning: true,
+          ip_address: ip,
+          ip_hash: await hashIp(ip),
         })
         .eq('id', visitorId);
+
+      // Update location if current one is missing
+      const { data: existingLocation } = await supabase
+        .from('locations')
+        .select('id, country')
+        .eq('visitor_id', visitorId)
+        .maybeSingle();
+
+      if (!existingLocation || !existingLocation.country || existingLocation.country === 'Local') {
+        const geo = await geoLookup(ip);
+
+        console.log('Geo lookup IP:', ip);
+        console.log('Geo result:', geo);
+
+        if (geo) {
+          if (existingLocation) {
+            await supabase
+              .from('locations')
+              .update({
+                country: geo.country,
+                country_code: geo.country_code,
+                region: geo.region,
+                city: geo.city,
+                latitude: geo.lat,
+                longitude: geo.lon,
+              })
+              .eq('visitor_id', visitorId);
+          } else {
+            await supabase.from('locations').insert({
+              visitor_id: visitorId,
+              country: geo.country,
+              country_code: geo.country_code,
+              region: geo.region,
+              city: geo.city,
+              latitude: geo.lat,
+              longitude: geo.lon,
+            });
+          }
+        }
+      }
+
     } else {
       const { data: newVisitor, error: visitorErr } = await supabase
         .from('visitors')

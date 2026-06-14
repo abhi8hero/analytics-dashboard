@@ -44,6 +44,9 @@ export async function fetchOverviewStats(days = 30, siteDomain: string | null = 
   uvQuery = withSite(uvQuery, siteDomain);
   const { data: uvData } = await uvQuery;
   const uniqueVisitors = new Set((uvData ?? []).map((r) => r.visitor_id)).size;
+  console.log('PV', visitsRes)
+  console.log('SESS', sessionsRes)
+  console.log('UV', uvData)
 
   // Returning visitors from that unique set
   const visitorIds = [...new Set((uvData ?? []).map((r) => r.visitor_id))];
