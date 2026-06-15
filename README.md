@@ -1,4 +1,4 @@
-# Analytical Dashboard
+# 📊 Analytical Dashboard
 
 A real-time analytics and traffic monitoring system designed to track, manage, and visualize website user activity through an interactive dashboard.
 
@@ -85,20 +85,20 @@ For example, if your project ref is "abcdefghijklmno", your endpoint is:
 
 Keep this URL handy — you'll use it below.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PLAIN HTML WEBSITE (Most Common)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+### PLAIN HTML WEBSITE (Most Common)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Add ONE line to each HTML page you want to track.
 Place it just before the closing </body> tag.
 
   ┌──────────────────────────────────────────────────────────────────────────┐
-  │  <script                                                                 │
-  │    src="https://YOUR_DASHBOARD_URL/tracker.js"                           │
-  │    data-endpoint="https://YOUR_PROJECT.supabase.co/functions/v1/track"   │
-  │    defer                                                                 │
-  │  ></script>                                                              │
-  │  </body>                                                                 │
+    <script                                                                 
+      src="https://YOUR_DASHBOARD_URL/tracker.js"                           
+      data-endpoint="https://YOUR_PROJECT.supabase.co/functions/v1/track"   
+      defer                                                                 
+    ></script>                                                              
+    </body>                                                                 
   └──────────────────────────────────────────────────────────────────────────┘
 
 That's it! Every page with this snippet will be tracked.
