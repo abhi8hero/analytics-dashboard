@@ -92,14 +92,14 @@ Keep this URL handy — you'll use it below.
 Add ONE line to each HTML page you want to track.
 Place it just before the closing </body> tag.
 
-  ┌──────────────────────────────────────────────────────────────────────────┐
+  
     <script                                                                 
       src="https://YOUR_DASHBOARD_URL/tracker.js"                           
       data-endpoint="https://YOUR_PROJECT.supabase.co/functions/v1/track"   
       defer                                                                 
     ></script>                                                              
     </body>                                                                 
-  └──────────────────────────────────────────────────────────────────────────┘
+
 
 That's it! Every page with this snippet will be tracked.
 
