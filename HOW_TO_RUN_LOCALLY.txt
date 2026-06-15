@@ -1,0 +1,198 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║           WEBSITE ANALYTICS SYSTEM — HOW TO RUN LOCALLY                    						  ║
+║                     Built with React + Vite + Supabase                     						║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+This guide walks you through running your self-hosted analytics dashboard
+on your local machine, step by step. No prior experience required.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1 — WHAT YOU NEED INSTALLED FIRST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Before starting, install the following tools on your computer:
+
+1. Node.js (version 18 or newer)
+   Download from: https://nodejs.org
+   After installing, open a terminal and verify:
+      node --version    → should show v18.x.x or higher
+      npm --version     → should show 8.x.x or higher
+
+2. Git (to clone or manage the project)
+   Download from: https://git-scm.com
+   Verify: git --version
+
+3. A code editor (recommended: VS Code)
+   Download from: https://code.visualstudio.com
+
+4. A Supabase account (FREE)
+   Sign up at: https://supabase.com
+   This is your free cloud database. No credit card needed.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2 — PROJECT FOLDER STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+After extracting the ZIP, your project looks like this:
+
+  analytics-dashboard/
+  ├── src/
+  │   ├── pages/           → Dashboard pages (Overview, Realtime, etc.)
+  │   ├── components/      → Reusable UI components
+  │   ├── services/        → Supabase data-fetching logic
+  │   ├── types/           → TypeScript type definitions
+  │   └── db/supabase.ts   → Supabase client
+  ├── supabase/
+  │   └── functions/
+  │       └── track/       → Edge Function that receives tracking data
+  ├── public/
+  │   └── tracker.js       → The script you embed on your websites
+  ├── .env                 → Environment variables (YOU MUST CREATE THIS)
+  ├── package.json         → Project dependencies
+  └── index.html           → App entry point
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3 — SET UP SUPABASE (ONE-TIME SETUP)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your analytics data is stored in Supabase (free cloud PostgreSQL database).
+Follow these steps once:
+
+STEP 3.1 — Create a Supabase Project
+  1. Go to https://supabase.com and sign in
+  2. Click "New Project"
+  3. Fill in:
+       Name: my-analytics (or anything you like)
+       Database Password: create a strong password and SAVE IT
+       Region: choose the closest to you
+  4. Click "Create new project" and wait ~2 minutes
+
+STEP 3.2 — Get Your API Keys
+  1. In your Supabase project, click the gear icon (Settings) in the left sidebar
+  2. Click "API"
+  3. You will see:
+       Project URL:    → copy this (looks like https://xxxx.supabase.co)
+       anon public:    → copy this (long JWT token)
+       service_role:   → copy this (keep this SECRET, never share it)
+
+STEP 3.3 — Create the Database Tables
+  1. In Supabase, click "SQL Editor" in the left sidebar
+  2. Click "New query"
+  3. Copy and paste ALL the SQL from the file: DATABASE_SCHEMA.sql
+     (included in this ZIP — see the file in the root folder)
+  4. Click "Run" (green button)
+  5. You should see "Success. No rows returned"
+
+STEP 3.4 — Deploy the Tracking Edge Function
+  1. Install Supabase CLI:
+       npm install -g supabase
+  2. Open a terminal inside your project folder
+  3. Login to Supabase:
+       supabase login
+     (it will open a browser window — authorize it)
+  4. Link your project (replace XXXX with your project reference ID):
+       supabase link --project-ref XXXX
+     (find your project ref in Supabase → Settings → General)
+  5. Deploy the tracking function:
+       supabase functions deploy track
+  6. Done! Your tracking endpoint is now live.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4 — CONFIGURE YOUR LOCAL ENVIRONMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create a file named exactly: .env
+(note the dot at the start — it is a hidden file)
+
+Place it in the ROOT of your project folder (same level as package.json).
+Paste this content and replace with YOUR actual values:
+
+  ┌─────────────────────────────────────────────────────┐
+  │  VITE_SUPABASE_URL=https://YOUR_PROJECT.supabase.co │
+  │  VITE_SUPABASE_ANON_KEY=your_anon_public_key_here   │
+  └─────────────────────────────────────────────────────┘
+
+  IMPORTANT: Never put your service_role key here. Only the anon key.
+  IMPORTANT: The .env file is NOT uploaded to GitHub (it is in .gitignore).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5 — INSTALL AND RUN THE DASHBOARD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Open a terminal and navigate to your project folder:
+
+  cd path/to/analytics-dashboard
+
+Install all dependencies (run once):
+
+  npm install
+
+Start the development server:
+
+  npm run dev
+
+You will see output like:
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.1.x:5173/
+
+Open your browser and go to:  http://localhost:5173
+
+Your analytics dashboard is now running! 🎉
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 6 — BUILD FOR PRODUCTION (DEPLOY ONLINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+When you want to host the dashboard online (so you can access it from anywhere):
+
+  npm run build
+
+This creates a "dist/" folder. Upload its contents to any static hosting:
+
+  Option A — Vercel (easiest, free):
+    1. Go to https://vercel.com
+    2. Connect your GitHub repo
+    3. Add your environment variables in Vercel dashboard
+    4. Deploy — done!
+
+  Option B — Netlify (free):
+    1. Go to https://netlify.com
+    2. Drag and drop the "dist/" folder
+    3. Add environment variables in site settings
+
+  Option C — Your own VPS/server:
+    Upload dist/ contents to your server's web root (e.g. /var/www/html)
+    Use Nginx or Apache to serve the static files
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 7 — USEFUL COMMANDS CHEAT SHEET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  npm install          Install dependencies (run once after cloning)
+  npm run dev          Start local development server
+  npm run build        Build production-ready files into dist/
+  npm run lint         Check code for errors
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 8 — TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Problem: "Cannot find module" errors on npm run dev
+  Solution: Run "npm install" first
+
+Problem: Dashboard loads but shows "0" for everything
+  Solution: Check your .env file values are correct (no spaces, no quotes)
+
+Problem: Tracking data not appearing in dashboard
+  Solution: Make sure the Edge Function is deployed (Section 3.4)
+  Also check: the tracker.js data-endpoint URL matches your Supabase URL
+
+Problem: "Invalid API key" error in browser console
+  Solution: Double-check VITE_SUPABASE_ANON_KEY in your .env file
+
+Problem: Port 5173 already in use
+  Solution: Run "npm run dev -- --port 3000" to use a different port
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Need help? The project source is fully open — check src/ folder for all code.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

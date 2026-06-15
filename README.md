@@ -1,91 +1,114 @@
-# Welcome to Your Miaoda Project
+# Analytical Dashboard
 
-## Project Info
+A real-time analytics and traffic monitoring system designed to track, manage, and visualize website user activity through an interactive dashboard.
 
-## Project Directory
 
-```
-├── README.md # Documentation
-├── components.json # Component library configuration
-├── index.html # Entry file
-├── package.json # Package management
-├── postcss.config.js # PostCSS configuration
-├── public # Static resources directory
-│   ├── favicon.png # Icon
-│   └── images # Image resources
-├── src # Source code directory
-│   ├── App.tsx # Entry file
-│   ├── components # Components directory
-│   ├── context # Context directory
-│   ├── db # Database configuration directory
-│   ├── hooks # Common hooks directory
-│   ├── index.css # Global styles
-│   ├── layout # Layout directory
-│   ├── lib # Utility library directory
-│   ├── main.tsx # Entry file
-│   ├── routes.tsx # Routing configuration
-│   ├── pages # Pages directory
-│   ├── services # Database interaction directory
-│   ├── types # Type definitions directory
-├── tsconfig.app.json # TypeScript frontend configuration file
-├── tsconfig.json # TypeScript configuration file
-├── tsconfig.node.json # TypeScript Node.js configuration file
-└── vite.config.ts # Vite configuration file
-```
+## 📖 About the Project
 
-## Tech Stack
+**Analytical Dashboard** is a full-stack web application developed to monitor website traffic and user interactions in real time.  
+The system provides live analytics, user activity tracking, and data visualization through a modern dashboard interface.
 
-Vite, TypeScript, React, Supabase
+This project focuses on helping administrators understand:
+- Website traffic behavior
+- Real-time user activity
+- Visitor insights and analytics
+- System monitoring and management
 
-## Development Guidelines
+The project was built to strengthen understanding of:
+- Real-time data tracking
+- Full-stack dashboard architecture
+- Authentication and database integration
+- Analytics visualization systems
 
-### How to edit code locally?
 
-You can choose [VSCode](https://code.visualstudio.com/Download) or any IDE you prefer. The only requirement is to have Node.js and npm installed.
+## 🚀 Live Demo 
+🚧 Currently running locally / on Vite development server
 
-### Environment Requirements
 
-```
-# Node.js ≥ 20
-# npm ≥ 10
-Example:
-# node -v   # v20.18.3
-# npm -v    # 10.8.2
-```
+## 📸 Screenshots
 
-### Installing Node.js on Windows
+### Dashboard Overview
+![alt text](image.png)
 
-```
-# Step 1: Visit the Node.js official website: https://nodejs.org/, click download. The website will automatically suggest a suitable version (32-bit or 64-bit) for your system.
-# Step 2: Run the installer: Double-click the downloaded installer to run it.
-# Step 3: Complete the installation: Follow the installation wizard to complete the process.
-# Step 4: Verify installation: Open Command Prompt (cmd) or your IDE terminal, and type `node -v` and `npm -v` to check if Node.js and npm are installed correctly.
-```
+### Real-Time Traffic Monitoring
+![alt text](image-1.png)
 
-### Installing Node.js on macOS
+### Database Activity Panel
+![alt text](image-2.png)
 
-```
-# Step 1: Using Homebrew (Recommended method): Open Terminal. Type the command `brew install node` and press Enter. If Homebrew is not installed, you need to install it first by running the following command in Terminal:
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-Alternatively, use the official installer: Visit the Node.js official website. Download the macOS .pkg installer. Open the downloaded .pkg file and follow the prompts to complete the installation.
-# Step 2: Verify installation: Open Command Prompt (cmd) or your IDE terminal, and type `node -v` and `npm -v` to check if Node.js and npm are installed correctly.
-```
 
-### After installation, follow these steps:
+## ✨ Features
+- Real-time website traffic monitoring
+- Live user activity tracking
+- Interactive analytics dashboard
+- Responsive and modern UI
+- Authentication system
+- Supabase database integration
+- Scalable React component architecture
 
-```
-# Step 1: Download the code package
-# Step 2: Extract the code package
-# Step 3: Open the code package with your IDE and navigate into the code directory
-# Step 4: In the IDE terminal, run the command to install dependencies: npm i
-# Step 5: In the IDE terminal, run the command to start the development server: npm run dev -- --host 127.0.0.1
-# Step 6: if step 5 failed, try this command to start the development server: npx vite --host 127.0.0.1
-```
 
-### How to develop backend services?
+## 🛠️ Tech Stack
+- **React** – Frontend framework  
+- **TypeScript** – Type-safe development  
+- **Vite** – Fast build tool  
+- **Supabase** – Backend & database services  
 
-Configure environment variables and install relevant dependencies.If you need to use a database, please use the official version of Supabase.
+## 🚀 How to Run Locally
+Install dependencies (run once after cloning)
 
-## Learn More
+      npm install     
+     
+Start local development server
 
-You can also check the help documentation: Download and Building the app（ [https://intl.cloud.baidu.com/en/doc/MIAODA/s/download-and-building-the-app-en](https://intl.cloud.baidu.com/en/doc/MIAODA/s/download-and-building-the-app-en)）to learn more detailed content.
+      npm run dev  
+
+Build production-ready files into dist/
+
+      npm run build  
+
+Check code for errors
+
+      npm run lint         
+
+For detailed information view [HOW_TO_RUN_LOCALLY.txt](HOW_TO_RUN_LOCALLY.txt)
+
+## 🌐 How to Add Website
+Your personal tracking endpoint (where data is sent) is:
+
+  https://YOUR_SUPABASE_PROJECT.supabase.co/functions/v1/track
+
+Replace "YOUR_SUPABASE_PROJECT" with your actual Supabase project reference.
+You can find it at: Supabase Dashboard → Settings → General → Reference ID
+
+For example, if your project ref is "abcdefghijklmno", your endpoint is:
+  https://abcdefghijklmno.supabase.co/functions/v1/track
+
+Keep this URL handy — you'll use it below.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PLAIN HTML WEBSITE (Most Common)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Add ONE line to each HTML page you want to track.
+Place it just before the closing </body> tag.
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  <script                                                                 │
+  │    src="https://YOUR_DASHBOARD_URL/tracker.js"                           │
+  │    data-endpoint="https://YOUR_PROJECT.supabase.co/functions/v1/track"   │
+  │    defer                                                                 │
+  │  ></script>                                                              │
+  │  </body>                                                                 │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+That's it! Every page with this snippet will be tracked.
+
+For detailed information view [HOW_TO_ADD_WEBSITE.txt](HOW_TO_ADD_WEBSITE.txt)
+
+
+
+## 👨‍💻 Designed By                             
+Abhishek Ugare                                               
+Email: abhishekugare1289@gmail.com                                
+LinkedIn: www.linkedin.com/in/abhishek-ugare-a289s85k                    
+Portfolio: https://abhi8hero.github.io/portfolio-abhishek_ugare/

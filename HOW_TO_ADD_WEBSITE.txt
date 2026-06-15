@@ -1,0 +1,289 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║        HOW TO ADD YOUR WEBSITES TO THE ANALYTICS TRACKER                   ║
+║              Works with ANY website — HTML, WordPress, React, etc.         ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+This guide explains how to add the invisible tracking script to any website
+you own. Visitors will NEVER see any banners, popups, or consent dialogs.
+The script runs 100% silently in the background.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BEFORE YOU START — YOUR TRACKING ENDPOINT URL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your personal tracking endpoint (where data is sent) is:
+
+  https://YOUR_SUPABASE_PROJECT.supabase.co/functions/v1/track
+
+Replace "YOUR_SUPABASE_PROJECT" with your actual Supabase project reference.
+You can find it at: Supabase Dashboard → Settings → General → Reference ID
+
+For example, if your project ref is "abcdefghijklmno", your endpoint is:
+  https://abcdefghijklmno.supabase.co/functions/v1/track
+
+Keep this URL handy — you'll use it in all methods below.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+METHOD 1 — PLAIN HTML WEBSITE (Most Common)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Add ONE line to each HTML page you want to track.
+Place it just before the closing </body> tag.
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  <script                                                                 │
+  │    src="https://YOUR_DASHBOARD_URL/tracker.js"                          │
+  │    data-endpoint="https://YOUR_PROJECT.supabase.co/functions/v1/track"  │
+  │    defer                                                                 │
+  │  ></script>                                                              │
+  │  </body>                                                                 │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+EXAMPLE of a complete simple HTML page:
+
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <title>My Website</title>
+  </head>
+  <body>
+    <h1>Welcome to my site!</h1>
+    <p>Page content goes here...</p>
+
+    <!-- Analytics tracker (invisible to visitors) -->
+    <script
+      src="https://YOUR_DASHBOARD_URL/tracker.js"
+      data-endpoint="https://abcdefghijklmno.supabase.co/functions/v1/track"
+      defer
+    ></script>
+  </body>
+  </html>
+
+That's it! Every page with this snippet will be tracked.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+METHOD 2 — SELF-HOSTED (Serve tracker.js yourself, No External URL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If you don't want to depend on your dashboard URL to serve tracker.js,
+host the script yourself:
+
+  Step 1: Copy the file "public/tracker.js" from this project
+  Step 2: Upload it to your website (e.g., /assets/tracker.js)
+  Step 3: Add the script tag pointing to your own URL:
+
+  <script
+    src="/assets/tracker.js"
+    data-endpoint="https://YOUR_PROJECT.supabase.co/functions/v1/track"
+    defer
+  ></script>
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+METHOD 3 — INLINE (Best Performance — Zero Extra HTTP Request)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For maximum performance, paste the tracker code directly into your HTML.
+This avoids a separate network request for tracker.js.
+
+  Step 1: Open the file "public/tracker.js" in a text editor
+  Step 2: Find this line near the top:
+            const TRACK_ENDPOINT =
+              document.currentScript?.getAttribute('data-endpoint') ||
+              'https://fkkircsgncmovjimzkie.supabase.co/functions/v1/track';
+  Step 3: Replace the fallback URL with YOUR endpoint
+  Step 4: Copy the ENTIRE file content
+  Step 5: Paste it inside <script> tags on your page:
+
+  <script>
+  /* PASTE ENTIRE tracker.js CONTENT HERE */
+  </script>
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+METHOD 4 — WORDPRESS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Option A — Using a plugin (easiest):
+  1. Install the free plugin "Insert Headers and Footers" in WordPress
+  2. Go to Settings → Insert Headers and Footers
+  3. Paste the script tag (from Method 1) into the "Scripts in Footer" box
+  4. Save — ALL pages on your WordPress site are now tracked
+
+Option B — Editing your theme (advanced):
+  1. Go to Appearance → Theme Editor
+  2. Open footer.php
+  3. Paste the script tag just before </body>
+  4. Update the file
+
+Option C — Using WordPress functions.php:
+  1. Go to Appearance → Theme Editor → functions.php
+  2. Add this at the bottom:
+
+     function add_analytics_tracker() {
+       echo '<script src="https://YOUR_DASHBOARD_URL/tracker.js"
+         data-endpoint="https://YOUR_PROJECT.supabase.co/functions/v1/track"
+         defer></script>';
+     }
+     add_action('wp_footer', 'add_analytics_tracker');
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+METHOD 5 — REACT / VITE APP (Single Page Application)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For React apps, use a custom hook that loads the tracker once on mount.
+The tracker automatically detects URL changes (pushState) for SPAs.
+
+  Step 1: Create a file src/hooks/useAnalytics.ts in your React project:
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  // src/hooks/useAnalytics.ts                                            │
+  │  import { useEffect } from 'react';                                      │
+  │                                                                          │
+  │  const TRACK_ENDPOINT =                                                  │
+  │    'https://YOUR_PROJECT.supabase.co/functions/v1/track';               │
+  │                                                                          │
+  │  export function useAnalytics() {                                        │
+  │    useEffect(() => {                                                      │
+  │      const script = document.createElement('script');                   │
+  │      script.src = '/tracker.js'; // place tracker.js in your /public    │
+  │      script.dataset.endpoint = TRACK_ENDPOINT;                          │
+  │      script.defer = true;                                                │
+  │      document.head.appendChild(script);                                 │
+  │      return () => {                                                      │
+  │        if (document.head.contains(script)) {                            │
+  │          document.head.removeChild(script);                             │
+  │        }                                                                 │
+  │      };                                                                  │
+  │    }, []);                                                               │
+  │  }                                                                       │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+  Step 2: Copy tracker.js into your React project's /public folder
+
+  Step 3: Call the hook in your root App component:
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  // src/App.tsx                                                          │
+  │  import { useAnalytics } from './hooks/useAnalytics';                   │
+  │                                                                          │
+  │  function App() {                                                        │
+  │    useAnalytics(); // ← add this one line                               │
+  │                                                                          │
+  │    return (                                                              │
+  │      <div>... your app ...</div>                                         │
+  │    );                                                                    │
+  │  }                                                                       │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+METHOD 6 — NEXT.JS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  In your pages/_app.tsx or app/layout.tsx, add the Script component:
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  import Script from 'next/script';                                       │
+  │                                                                          │
+  │  export default function RootLayout({ children }) {                     │
+  │    return (                                                              │
+  │      <html>                                                              │
+  │        <body>                                                            │
+  │          {children}                                                      │
+  │          <Script                                                         │
+  │            src="/tracker.js"                                             │
+  │            data-endpoint="https://YOUR.supabase.co/functions/v1/track"  │
+  │            strategy="afterInteractive"                                   │
+  │          />                                                              │
+  │        </body>                                                           │
+  │      </html>                                                             │
+  │    );                                                                    │
+  │  }                                                                       │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+  Copy tracker.js into your Next.js project's /public folder first.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT DATA GETS COLLECTED (FOR YOUR RECORDS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Every time someone visits a page on your tracked website, this is recorded:
+
+  ✓ Page URL and title
+  ✓ Referrer URL (which website sent them to you)
+  ✓ Referrer domain (e.g., google.com, twitter.com)
+  ✓ Browser name and version (Chrome, Firefox, Safari...)
+  ✓ Operating system (Windows, macOS, iOS, Android...)
+  ✓ Device type (desktop / mobile / tablet)
+  ✓ Screen resolution (1920x1080, 390x844...)
+  ✓ Browser language (en-US, de-DE...)
+  ✓ Anonymous fingerprint (stable ID, no real cookies, no PII)
+  ✓ IP address — server-side only, used to look up location, then hashed
+  ✓ Country, region, and city (from IP geolocation)
+
+NOT collected:
+  ✗ Name, email, or any personal information
+  ✗ Passwords or form input contents
+  ✗ Credit card or payment data
+  ✗ Precise GPS location
+  ✗ Any data from other websites
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+HOW TO VERIFY IT'S WORKING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. Add the tracker to a page on your website
+  2. Visit that page in your browser
+  3. Open your analytics dashboard
+  4. Go to "Real-Time" section
+  5. You should see the active visitor count increase to 1
+  6. Go to "Overview" — your page visit should appear within seconds
+
+  Alternatively, check in Supabase:
+  1. Go to Supabase → Table Editor
+  2. Open the "page_views" table
+  3. You should see a new row with your page URL and timestamp
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Problem: No data appearing in dashboard after adding tracker
+  Check 1: Open browser DevTools (F12) → Network tab
+           Look for a request to "track" — check if it returns 200 OK
+  Check 2: Make sure data-endpoint URL is correct in your script tag
+  Check 3: Make sure the Edge Function is deployed (see HOW_TO_RUN.txt)
+  Check 4: Check Supabase → Functions → Logs for any errors
+
+Problem: "CORS error" in browser console
+  The Edge Function has CORS set to allow all origins (*)
+  If you see CORS errors, re-deploy the Edge Function:
+    supabase functions deploy track
+
+Problem: Visitor count not increasing
+  The tracker deduplicates visitors by fingerprint.
+  Try visiting from a different browser or incognito mode.
+  Also check the "page_views" table in Supabase directly.
+
+Problem: Location showing as "Local" or "Unknown"
+  This is normal for localhost / local development.
+  The geolocation IP lookup skips private IP ranges (192.168.x.x, 127.0.0.1).
+  In production with a real public IP, location will be detected correctly.
+
+Problem: Tracking not working on HTTPS site
+  Make sure your tracker script src and data-endpoint use HTTPS (not HTTP).
+  Supabase Edge Functions are always HTTPS.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRACKING MULTIPLE WEBSITES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You can track UNLIMITED websites with the same Supabase project.
+Just add the same tracker script to every site.
+
+All data flows into the same database. The dashboard will show visits
+from all your websites combined. The page URLs include the full domain
+so you can filter by site (e.g., search "mysite.com" in the Pages view).
+
+To separate data per website in the future, you can extend the schema to
+add a "site_id" column — but for now, all sites share one dashboard.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
